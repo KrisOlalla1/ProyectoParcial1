@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miembros de Clubs - Sistema Escolar</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header-component></header-component>
+    <menu-component></menu-component>
+    
+    <main>
+        <section id="miembros">
+            <h2>Listado de Miembros de Clubs</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Estudiante</th>
+                        <th>Club</th>
+                    </tr>
+                </thead>
+                <tbody id="miembros-lista"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer-component></footer-component>
+
+    <script type="module">
+        import './componentes/footer.js';
+        import './componentes/header.js';
+        import './componentes/menu.js';
+
+        // Función para obtener los miembros de la base de datos
+        async function getMiembros() {
+            try {
+                const response = await fetch('http://localhost:8000/miembros');
+                const miembros = await response.json();
+                renderMiembros(miembros);
+            } catch (error) {
+                console.error('Error al obtener los miembros:', error);
+            }
+        }
+
+        // Función para renderizar los miembros en la tabla
+        function renderMiembros(miembros) {
+            const miembrosLista = document.getElementById('miembros-lista');
+            miembrosLista.innerHTML = miembros.map(miembro => `
+                <tr>
+                    <td>${miembro.nombre_estudiante}</td>
+                    <td>${miembro.nombre_club}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Obtener los miembros cuando se cargue la página
+        getMiembros();
+    </script>
+</body>
+</html>
